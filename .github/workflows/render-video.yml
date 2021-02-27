@@ -20,7 +20,7 @@ jobs:
       - run: npm run build -- --props="$WORKFLOW_INPUT"
         env:
           WORKFLOW_INPUT: ${{ toJson(github.event.inputs) }}
-      - run: nxp ts-node src/upload-and-notify.ts
+      - run: npx ts-node src/upload-and-notify.ts
         env:
           SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}
           S3_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
