@@ -1,0 +1,19 @@
+on:
+  workflow_dispatch:
+name: Render video
+jobs:
+  render:
+    name: Render video
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@main
+      - uses: actions/setup-node@main
+      - uses: FedericoCarboni/setup-ffmpeg@v1
+          with:
+            token: ${{ secrets.GITHUB_TOKEN }}
+      - run: npm i
+      - run: npm run build
+      - uses: actions/upload-artifact@v2
+        with:
+          name: out.mp4
+          path: out.mp4
