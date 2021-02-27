@@ -1,8 +1,9 @@
 import {format} from 'date-fns';
-import {Img} from 'remotion';
+import {Img, interpolate, useCurrentFrame} from 'remotion';
 import styled from 'styled-components';
 import {GiftedAvatar} from './Avatar';
 import heart from './heart.svg';
+import {getMessageDuration, getOpacityForWord, LIKE_DURATION} from './math';
 
 export type User = {
 	username: string;
@@ -37,7 +38,7 @@ const Container = styled.div`
 	line-height: 1.3;
 	margin-left: 100px;
 	margin-right: 100px;
-	font-family: --Arial, Helvetica, sans-serif;
+	font-family: Arial, Helvetica, sans-serif;
 	margin-bottom: 50px;
 	margin-top: 50px;
 `;
@@ -68,10 +69,21 @@ const LikesLabel = styled.div`
 	font-size: 0.9em;
 `;
 
-export const Message: React.FC<{message: SingleMessageApiResponse}> = ({
-	message,
-}) => {
-	const likeArray = ['jonny', 'burger', 'three'];
+export const Message: React.FC<{
+	message: SingleMessageApiResponse;
+	delay: number;
+}> = ({delay, message}) => {
+	const frame = useCurrentFrame();
+	const likeArray = message.usersWhoLiked.map((m) => m.username);
+	const words = message.message.text.split(' ');
+	const wordOpacity = (i: number) =>
+		getOpacityForWord(message, i, frame - delay);
+	const totalDuration = getMessageDuration(message);
+	const likesOpacity = interpolate(
+		frame - delay,
+		[totalDuration - LIKE_DURATION, totalDuration],
+		[0, 1]
+	);
 	return (
 		<Container>
 			<div style={{flexDirection: 'row', display: 'flex'}}>
@@ -82,13 +94,22 @@ export const Message: React.FC<{message: SingleMessageApiResponse}> = ({
 						{message.user.username}{' '}
 						<Time>{format(message.message.createdAt, 'HH:mm')}</Time>
 					</Username>
-					<div>{message.message.text}</div>
+					<div>
+						{words.map((w, i) => {
+							return (
+								<span key={i} style={{opacity: wordOpacity(i)}}>
+									{w}{' '}
+								</span>
+							);
+						})}
+					</div>
 					<div
 						style={{
 							display: 'flex',
 							flexDirection: 'row',
 							alignItems: 'center',
 							marginTop: 8,
+							opacity: likesOpacity,
 						}}
 					>
 						<Heart src={heart} />
