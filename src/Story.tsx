@@ -13,7 +13,7 @@ import {messageEntrance, messageStart} from './math';
 import {Message, SingleMessageApiResponse} from './Message';
 
 export const Story: React.FC<{
-	messageIds: string[];
+	messageIds: string;
 }> = ({messageIds}) => {
 	const {fps, durationInFrames} = useVideoConfig();
 	const frame = useCurrentFrame();
@@ -24,7 +24,7 @@ export const Story: React.FC<{
 
 	const fetchMessages = useCallback(async () => {
 		const messages = await Promise.all(
-			messageIds.map(async (m) => {
+			messageIds.split(',').map(async (m) => {
 				const response = await fetch(
 					`https://bestande.ch/api/chat/messages/${m}`
 				);

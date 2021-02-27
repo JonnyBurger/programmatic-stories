@@ -4,7 +4,7 @@ on:
       messageIds:
         description: "Which message ids should it be?"
         required: true
-        default: "['b077588c-488f-458c-bf5a-33585850c3ae', 'dcd83c57-aa47-45a2-b41d-0bd8d3f95724']"
+        default: "b077588c-488f-458c-bf5a-33585850c3ae,dcd83c57-aa47-45a2-b41d-0bd8d3f95724"
 
   push:
 name: Render video

@@ -15,7 +15,7 @@ export const RemotionVideo: React.FC = () => {
 					messageIds: [
 						'b077588c-488f-458c-bf5a-33585850c3ae',
 						'dcd83c57-aa47-45a2-b41d-0bd8d3f95724',
-					],
+					].join(','),
 				}}
 			/>
 		</>
