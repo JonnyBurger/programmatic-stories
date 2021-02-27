@@ -112,18 +112,20 @@ export const Message: React.FC<{
 							opacity: likesOpacity,
 						}}
 					>
-						<Heart src={heart} />
-						<div style={{width: 15}} />
 						{likeArray.length > 0 ? (
-							<LikesLabel>
-								{likeArray.length > 2
-									? likeArray[0] +
-									  ' + ' +
-									  String(likeArray.length - 1) +
-									  ' ' +
-									  'others'
-									: likeArray.join(', ')}
-							</LikesLabel>
+							<>
+								<Heart src={heart} />
+								<div style={{width: 15}} />
+								<LikesLabel>
+									{likeArray.length > 2
+										? likeArray[0] +
+										  ' + ' +
+										  String(likeArray.length - 1) +
+										  ' ' +
+										  'others'
+										: likeArray.join(', ')}
+								</LikesLabel>
+							</>
 						) : null}
 					</div>
 				</div>

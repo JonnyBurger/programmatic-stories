@@ -20,6 +20,8 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
       - run: npm i
       - run: npm run build -- --props="$WORKFLOW_INPUT"
+        env:
+          WORKFLOW_INPUT: ${{ toJson(github.event.inputs) }}1
       - uses: actions/upload-artifact@v2
         with:
           name: out.mp4
