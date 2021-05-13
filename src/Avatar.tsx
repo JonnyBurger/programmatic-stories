@@ -3,6 +3,7 @@ import React, {useCallback, useMemo} from 'react';
 import {Text, View} from 'react-native';
 import {Img} from 'remotion';
 import {getAvatarInitials} from './get-avatar-initials';
+import {getImageUrl} from './get-image-url';
 import {User} from './Message';
 
 export const BLUE = darken(0.1, '#3498db');
@@ -59,6 +60,8 @@ interface GiftedAvatarProps {
 	onPress?(props: any): void;
 }
 
+const IMGIX_DOMAIN = 'https://img.bestande.ch';
+
 export const GiftedAvatar: React.FC<GiftedAvatarProps> = (props) => {
 	const userName = props.user?.username || '';
 
@@ -87,7 +90,17 @@ export const GiftedAvatar: React.FC<GiftedAvatarProps> = (props) => {
 
 	const renderAvatar = useCallback((user: User) => {
 		if (typeof user.avatar === 'string') {
-			return <Img src={user.avatar} style={styles.avatarStyle} />;
+			return (
+				<Img
+					src={getImageUrl({
+						cdn_identifier: user.avatar,
+						height: 200,
+						width: 200,
+						crop: null,
+					})}
+					style={styles.avatarStyle}
+				/>
+			);
 		}
 		return null;
 	}, []);
