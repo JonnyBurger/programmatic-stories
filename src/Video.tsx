@@ -22,7 +22,7 @@ export const RemotionVideo: React.FC = () => {
 
 	useEffect(() => {
 		getDuration(messages).then((d) => {
-			setDuration(d);
+			setDuration(Math.floor(d));
 			continueRender(handle);
 		});
 	}, [handle, messages]);

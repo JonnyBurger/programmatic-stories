@@ -1,10 +1,10 @@
 import {interpolate, spring} from 'remotion';
 import {SingleMessageApiResponse} from './Message';
 
-const DURATION_PER_CHARACTER = 0.5;
+const DURATION_PER_CHARACTER = 0.1;
 export const LIKE_DURATION = 4;
 const ENTRANCE_TRANSITION_DURATION = 40;
-const END_STILL_TIME = 80;
+const END_STILL_TIME = 250;
 
 export const getMessageSegments = (
 	message: SingleMessageApiResponse

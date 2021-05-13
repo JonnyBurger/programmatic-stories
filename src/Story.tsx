@@ -1,9 +1,12 @@
 import {useCallback, useEffect, useState} from 'react';
 import {
 	AbsoluteFill,
+	Audio,
 	continueRender,
 	delayRender,
 	interpolate,
+	measureSpring,
+	Sequence,
 	spring,
 	useCurrentFrame,
 	useVideoConfig,
@@ -11,6 +14,12 @@ import {
 import {Background} from './Background';
 import {messageEntrance, messageStart} from './math';
 import {Message, SingleMessageApiResponse} from './Message';
+import collapse from './sounds/collapse.mp3';
+import audio1 from './sounds/tab1.mp3';
+import audio2 from './sounds/tab2.mp3';
+import audio3 from './sounds/tab3.mp3';
+
+console.log('hi');
 
 export const Story: React.FC<{
 	messageIds: string;
@@ -43,7 +52,15 @@ export const Story: React.FC<{
 
 	const fadeOut = spring({
 		fps,
-		frame: frame - durationInFrames + 20,
+		frame:
+			frame -
+			durationInFrames +
+			measureSpring({
+				fps,
+				config: {
+					damping: 200,
+				},
+			}),
 		config: {
 			damping: 200,
 		},
@@ -78,25 +95,36 @@ export const Story: React.FC<{
 							index: i,
 						});
 						return (
-							<div
-								style={{
-									transform: `translateY(${interpolate(
-										entrance,
-										[0, 1],
-										[300, 0]
-									)}px)`,
-									opacity: entrance,
-								}}
-							>
-								<Message
-									key={m.message._id}
-									delay={messageStart(messages, i)}
-									message={m}
-								/>
-							</div>
+							<>
+								<div
+									style={{
+										transform: `translateY(${interpolate(
+											entrance,
+											[0, 1],
+											[300, 0]
+										)}px)`,
+										opacity: entrance,
+									}}
+								>
+									<Message
+										key={m.message._id}
+										delay={messageStart(messages, i)}
+										message={m}
+									/>
+								</div>
+								<Sequence
+									from={Math.floor(messageStart(messages, i)) + 10}
+									durationInFrames={Infinity}
+								>
+									<Audio src={[audio1, audio2, audio3][i % 3]} />
+								</Sequence>
+							</>
 						);
 					})}
 				</AbsoluteFill>
+				<Sequence from={durationInFrames - 20} durationInFrames={Infinity}>
+					<Audio src={collapse} />
+				</Sequence>
 			</AbsoluteFill>
 		</div>
 	);
