@@ -1,6 +1,6 @@
 import {darken} from 'polished';
 import React, {useCallback, useMemo} from 'react';
-import {StyleProp, StyleSheet, Text, TextStyle, View} from 'react-native';
+import {Text, View} from 'react-native';
 import {Img} from 'remotion';
 import {getAvatarInitials} from './get-avatar-initials';
 import {User} from './Message';
@@ -31,10 +31,10 @@ const {
 	midnightBlue,
 } = Colors;
 
-const styles = StyleSheet.create({
+const styles = {
 	avatarStyle: {
-		justifyContent: 'center',
-		alignItems: 'center',
+		justifyContent: 'center' as const,
+		alignItems: 'center' as const,
 		height: 100,
 		width: 100,
 		borderRadius: 50,
@@ -50,13 +50,12 @@ const styles = StyleSheet.create({
 		color: 'white',
 		fontSize: 50,
 		backgroundColor: Colors.backgroundTransparent,
-		fontWeight: '500',
+		fontWeight: '500' as const,
 	},
-});
+};
 
 interface GiftedAvatarProps {
 	user: User | null;
-	textStyle?: StyleProp<TextStyle>;
 	onPress?(props: any): void;
 }
 
@@ -102,7 +101,7 @@ export const GiftedAvatar: React.FC<GiftedAvatarProps> = (props) => {
 
 	return (
 		<View style={[styles.avatarStyle, {backgroundColor: avatarColor}]}>
-			<Text style={[styles.textStyle, props.textStyle]}>{avatarName}</Text>
+			<Text style={styles.textStyle}>{avatarName}</Text>
 		</View>
 	);
 };

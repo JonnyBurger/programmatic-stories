@@ -1,21 +1,43 @@
-import {Composition} from 'remotion';
+import {useEffect, useState} from 'react';
+import {
+	Composition,
+	continueRender,
+	delayRender,
+	getInputProps,
+} from 'remotion';
+import {getDuration} from './fetch-msgs';
 import {Story} from './Story';
 
 export const RemotionVideo: React.FC = () => {
+	const props = getInputProps();
+	const [handle] = useState(() => delayRender());
+
+	const messages = props?.messageIds
+		? props.messageIds.split(',')
+		: '12697cdc-60cb-4860-9bd5-930c965a7abd,1817905d-a33f-42ec-a0d2-152db5b78325,0ed77e51-11a1-497a-b5fa-63538f6cd0c8'.split(
+				','
+		  );
+
+	const [duration, setDuration] = useState<number | null>(null);
+
+	useEffect(() => {
+		getDuration(messages).then((d) => {
+			setDuration(d);
+			continueRender(handle);
+		});
+	}, [handle, messages]);
+
 	return (
 		<>
 			<Composition
 				id="Story"
 				component={Story}
-				durationInFrames={7 * 30}
+				durationInFrames={duration ?? 3 * messages.length * 30}
 				fps={30}
 				width={1080}
 				height={1920}
 				defaultProps={{
-					messageIds: [
-						'b077588c-488f-458c-bf5a-33585850c3ae',
-						'dcd83c57-aa47-45a2-b41d-0bd8d3f95724',
-					].join(','),
+					messageIds: messages.join(','),
 				}}
 			/>
 		</>
